@@ -5,7 +5,7 @@ Maximum effort was taken to create a fast driver.<br />
 (TODO - ILI9488 is pending ... coming soon)<br />
 (tested with ESP8266_RTOS_SDK 1.4.0)
 
-[![esp8266_fast_lcd_driver_hspi](http://img.youtube.com/vi/E9Ds4IS-Ndk/0.jpg)](http://www.youtube.com/watch?v=E9Ds4IS-Ndk)
+[![esp8266_fast_lcd_driver_hspi](http://img.youtube.com/vi/E9Ds4IS-Ndk/1.jpg)](http://www.youtube.com/watch?v=E9Ds4IS-Ndk)
 
 ##Connection with LCD controller
 
