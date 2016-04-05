@@ -1,0 +1,23 @@
+/*
+ * Created by Martin Winkelhofer 03/2016
+ * W-Dimension / wdim / wdim0 / maarty.w@gmail.com
+ *  _      ____   ________       __    _
+ * | | /| / / /  / ___/ _ \  ___/ /___(_)  _____ ____
+ * | |/ |/ / /__/ /__/ // / / _  / __/ / |/ / -_) __/
+ * |__/|__/____/\___/____/  \_,_/_/ /_/|___/\__/_/
+ *
+ * This file is part of WLCD - W-Dimension's LCD driver (for ESP8266).
+ *
+ * WLCD is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * WLCD is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with WLCD. If not, see <http://www.gnu.org/licenses/>.
+ */
