@@ -10,7 +10,7 @@
 # - new flashinit (clear entire flash, flash FOTA bootloader v1.5 and ESP init) 
 # - baud 921600, COM3
 # - for ESP module with 1 MB flash memory
-# - wfofgen section added (specific for this project - generation of wfof/wfof_data.h (WLCD images data))
+# - wfofgen section added (specific for this project - generation of wfof/wfof_*.h (WLCD images data))
 #   (run first before "make all" or do "make rebuild")
 #
 #############################################################
