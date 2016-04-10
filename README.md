@@ -5,7 +5,7 @@ Maximum effort was taken to create a fast driver.<br />
 (tested with ESP8266_RTOS_SDK 1.4.0)
 
 <b>ESP8266 with 2.4" LCD module (320x240) - video</b><br>
-[![ESP8266 with 2.4" LCD module (320x240)](http://img.youtube.com/vi/E9Ds4IS-Ndk/1.jpg)](http://www.youtube.com/watch?v=E9Ds4IS-Ndk)
+[![ESP8266 with 2.4" LCD module (320x240)](http://img.youtube.com/vi/E9Ds4IS-Ndk/1.jpg)](http://www.youtube.com/watch?v=E9Ds4IS-Ndk)<br>
 <b>ESP8266 with 3.5" KeDei LCD module (480x320) - video</b><br>
 [![ESP8266 with 3.5" KeDei LCD module (480x320)](http://img.youtube.com/vi/NzYD4sONz20/1.jpg)](http://www.youtube.com/watch?v=NzYD4sONz20)
 
