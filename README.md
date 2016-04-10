@@ -1,11 +1,14 @@
-#ILI9341 / ILI9488 LCD driver for ESP8266
+#ILI9341 / ILI9486 / ILI9488 LCD driver for ESP8266
 
-Fast LCD driver written from scratch for ESP8266 to communicate with <b>ILI9341 (240x320) / ILI9488 (320x480)</b> compatible LCD controllers using ESP8266's HSPI (full 16 x 32-bit buffer) or SW bit-banging.<br />
+Fast LCD driver written from scratch for ESP8266 to communicate with <b>ILI9341 (240x320) or ILI9486 / ILI9488 (320x480) compatible</b> LCD controllers using ESP8266's HSPI (full 16 x 32-bit buffer) or SW bit-banging.<br />
 Maximum effort was taken to create a fast driver.<br />
 (TODO - ILI9488 is pending ... coming soon)<br />
 (tested with ESP8266_RTOS_SDK 1.4.0)
 
-[![esp8266_fast_lcd_driver_hspi](http://img.youtube.com/vi/E9Ds4IS-Ndk/1.jpg)](http://www.youtube.com/watch?v=E9Ds4IS-Ndk)
+<b>ESP8266 with 2.4" LCD module (320x240) - video</b><br>
+[![ESP8266 with 2.4" LCD module (320x240)](http://img.youtube.com/vi/E9Ds4IS-Ndk/1.jpg)](http://www.youtube.com/watch?v=E9Ds4IS-Ndk)
+<b>ESP8266 with 3.5" KeDei LCD module (480x320) - video</b><br>
+[![ESP8266 with 3.5" KeDei LCD module (480x320)](http://img.youtube.com/vi/NzYD4sONz20/1.jpg)](http://www.youtube.com/watch?v=NzYD4sONz20)
 
 ##Connection with LCD controller
 
@@ -15,7 +18,7 @@ Maximum effort was taken to create a fast driver.<br />
 	|                           |           |                            |
 	|       MTDO/GPIO15/HSPI_CS |----->-----| CS (active L)              |
 	|     MTCK/GPIO13/HSPI_MOSI |----->-----| MOSI                       |
-	|     MTDI/GPIO12/HSPI_MISO |-----<-----| MISO                       |
+	|     MTDI/GPIO12/HSPI_MISO |-----<-----| MISO (optional)            |
 	|      MTMS/GPIO14/HSPI_CLK |----->-----| CLK (leading edge, act. H) |
 	|                     GPIO4 |----->-----| D/C (data H / command L)   |
 	 ---------------------------             ----------------------------
