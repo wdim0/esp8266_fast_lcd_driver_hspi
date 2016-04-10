@@ -1,8 +1,7 @@
 #ILI9341 / ILI9486 / ILI9488 LCD driver for ESP8266
 
-Fast LCD driver written from scratch for ESP8266 to communicate with <b>ILI9341 (240x320) or ILI9486 / ILI9488 (320x480) compatible</b> LCD controllers using ESP8266's HSPI (full 16 x 32-bit buffer) or SW bit-banging.<br />
+<b>Fast LCD driver written from scratch for ESP8266 to communicate with ILI9341 (240x320) or ILI9486 / ILI9488 (320x480) compatible LCD controllers</b> using ESP8266's HSPI (full 16 x 32-bit buffer) or SW bit-banging.<br />
 Maximum effort was taken to create a fast driver.<br />
-(TODO - ILI9488 is pending ... coming soon)<br />
 (tested with ESP8266_RTOS_SDK 1.4.0)
 
 <b>ESP8266 with 2.4" LCD module (320x240) - video</b><br>
@@ -31,7 +30,7 @@ If WLCD_USE_HSPI is not defined, you can change all GPIOs (see "WLCD MAIN CONFIG
 In HSPI mode (using ESP8266's HSPI hardware module) the whole 16 x 32-bit buffer (SPI_W0..15) is used for MISO/MOSI transactions and we're using 32-bit copy instructions to speed up the copy process.<br />
 There's tradeoff because of that - if we're drawing image which is not RLE compressed (is just a continuous stream of R5G6B5 pixels) and we're using HSPI mode, then image data buffer must be 4-bytes aligned and allocated memory length must be multiples of 4.
 
-You can choose your own HSPI clock rate (see "WLCD MAIN CONFIG" section in wlcd.h). My display (see YT video on the top) is happy up to 40 MHz SPI clock (including).
+You can choose your own HSPI clock rate (see "WLCD MAIN CONFIG" section in wlcd.h). My 2.4" display (see YT video on the top) is happy up to 40 MHz SPI clock (including).
 
 In SW bit-banging mode (use HSPI whenever possible) you can easily change all GPIOs what are used to communicate with LCD controller (see "WLCD MAIN CONFIG" section in wlcd.h).<br />
 In HSPI you can change CS and D/C GPIOs.
