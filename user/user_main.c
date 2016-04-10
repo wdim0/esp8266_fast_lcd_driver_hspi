@@ -36,7 +36,7 @@ void ICACHE_FLASH_ATTR user_init(void){
 	//
 	while(1){
 		//
-		//---- WLCD test / demo intro
+		//---- WLCD test / demo intro (countdown)
 		//
 		//clear whole display (black)
 		wlcd_rect_fill_16bpp(0,0, WLCD_WIDTH, WLCD_HEIGHT, 0x0000);
@@ -130,11 +130,11 @@ void ICACHE_FLASH_ATTR user_init(void){
 		S.MaxW = WLCD_WIDTH-20;
 		S.MaxH = WLCD_HEIGHT-20;
 		S.WrapStyle = WLCD_WRAP_WORDS;
-		sprintf(Str, "1000 x random line on display %dx%d took %d ms (compensated for \"rand()\" calculation)", WLCD_WIDTH, WLCD_HEIGHT, (t-t2)/1000);
+		sprintf(Str, "1000 random lines on display %dx%d took %d ms (compensated for \"rand()\" calculation)", WLCD_WIDTH, WLCD_HEIGHT, (t-t2)/1000);
 		wlcd_text_draw(Str, &S);
 		vTaskDelay(5000 / portTICK_RATE_MS); //([ms] / portTICK_RATE_MS)
 		//
-		//---- image speed test
+		//---- image draw / image speed test
 		//
 		wfof_get_file_data_fast(WFOF_IDX_SMILEY_50X50, (uint32_t*)ImgData, 0, WFOF_SIZE_SMILEY_50X50);
 		//
@@ -165,11 +165,11 @@ void ICACHE_FLASH_ATTR user_init(void){
 		S.MaxW = WLCD_WIDTH-20;
 		S.MaxH = WLCD_HEIGHT-20;
 		S.WrapStyle = WLCD_WRAP_WORDS;
-		sprintf(Str, "1000 x image 50x50 pixels (uncompressed R5G6B5) took %d ms", t/1000);
+		sprintf(Str, "1000 images (50x50 pixels, uncompressed R5G6B5) took %d ms", t/1000);
 		wlcd_text_draw(Str, &S);
 		vTaskDelay(5000 / portTICK_RATE_MS); //([ms] / portTICK_RATE_MS)
 		//
-		//---- text speed test
+		//---- text draw / text speed test
 		//
 		//clear whole display (black)
 		wlcd_rect_fill_16bpp(0,0, WLCD_WIDTH, WLCD_HEIGHT, 0x0000);
@@ -204,11 +204,11 @@ void ICACHE_FLASH_ATTR user_init(void){
 		S.MaxW = WLCD_WIDTH-20;
 		S.MaxH = WLCD_HEIGHT-20;
 		S.WrapStyle = WLCD_WRAP_WORDS;
-		sprintf(Str, "100 x text sentence of 60 letters with word wrapping took %d ms", t/1000);
+		sprintf(Str, "100 text sentences of 60 letters with word wrapping took %d ms", t/1000);
 		wlcd_text_draw(Str, &S);
 		vTaskDelay(5000 / portTICK_RATE_MS); //([ms] / portTICK_RATE_MS)
 		//
-		//---- text test / code page 1250 test
+		//---- text / font test - code page 1250 test
 		//
 		//clear whole display (black)
 		wlcd_rect_fill_16bpp(0,0, WLCD_WIDTH, WLCD_HEIGHT, 0x0000);
@@ -249,7 +249,7 @@ void ICACHE_FLASH_ATTR user_init(void){
 		S.Y = 50;
 		S.R5G6B5 = 0b1100000111111111;
 		S.HSpc = 5;
-		wlcd_text_draw("We can also add horz./vert. spacing.", &S);
+		wlcd_text_draw("We can also add horiz./vert. spacing.", &S);
 		//
 		S.Y = 75;
 		S.R5G6B5 = 0b1111100111101111;
@@ -279,6 +279,7 @@ void ICACHE_FLASH_ATTR user_init(void){
 		//
 		//---- read display data RAM back into buffer as WLCD image and use it to draw many copies of that image
 		//
+#ifndef WLCD_NO_READ
 		//clear whole display (black)
 		wlcd_rect_fill_16bpp(0,0, WLCD_WIDTH, WLCD_HEIGHT, 0x0000);
 		//
@@ -308,6 +309,9 @@ void ICACHE_FLASH_ATTR user_init(void){
 		}
 		//
 		vTaskDelay(8000 / portTICK_RATE_MS); //([ms] / portTICK_RATE_MS)
+#endif
+		//
+		//---- logo, github address
 		//
 		//clear whole display (black)
 		wlcd_rect_fill_16bpp(0,0, WLCD_WIDTH, WLCD_HEIGHT, 0x0000);
@@ -332,7 +336,7 @@ void ICACHE_FLASH_ATTR user_init(void){
 		//
 	}
 	//
-	//clean-up (yes, we never get here .. but it's always good to keep structured)
+	//clean-up (yes, we never get here .. but it's always good to keep things structured)
 	free(Str);
 	free(ImgData);
 }

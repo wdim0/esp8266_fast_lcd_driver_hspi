@@ -914,15 +914,180 @@ int8_t ICACHE_FLASH_ATTR wlcd_init(void){
 #elif(WLCD_DISPLAY==WLCD_ILI9488)
 	DBG_WLCD("initializing display controller ILI9488\n");
 	//
-
-	//TODO
-
+	wlcd_cmd_only(WLCD_SW_RESET);
+	vTaskDelay(150 / portTICK_RATE_MS); //([ms] / portTICK_RATE_MS)
+	//
+	uint8_t* Buf = malloc(16);
+	if(Buf==NULL){
+		DBG_WLCD("can't allocate memory for write buffer\n");
+		return -1;
+	}
+	uint8_t Cmd, Idx;
+	//
+	//this is copied from ILI9341 section - the init of controllers is almost identical (except some missing commands according to PDF datasheets)
+	Idx = 0;
+	Cmd = 0xEF;
+	Buf[Idx++] = 0x03;
+	Buf[Idx++] = 0x80;
+	Buf[Idx++] = 0x02;
+	wlcd_write(FLG_SEND_CMD|FLG_PULSE_CS_ON_START, Cmd, (uint32_t*)Buf, Idx);
+	//
+	Idx = 0;
+	Cmd = 0xCF;
+	Buf[Idx++] = 0x00;
+	Buf[Idx++] = 0xC1;
+	Buf[Idx++] = 0x30;
+	wlcd_write(FLG_SEND_CMD|FLG_PULSE_CS_ON_START, Cmd, (uint32_t*)Buf, Idx);
+	//
+	Idx = 0;
+	Cmd = 0xED;
+	Buf[Idx++] = 0x64;
+	Buf[Idx++] = 0x03;
+	Buf[Idx++] = 0x12;
+	Buf[Idx++] = 0x81;
+	wlcd_write(FLG_SEND_CMD|FLG_PULSE_CS_ON_START, Cmd, (uint32_t*)Buf, Idx);
+	//
+	Idx = 0;
+	Cmd = 0xE8;
+	Buf[Idx++] = 0x85;
+	Buf[Idx++] = 0x00;
+	Buf[Idx++] = 0x78;
+	wlcd_write(FLG_SEND_CMD|FLG_PULSE_CS_ON_START, Cmd, (uint32_t*)Buf, Idx);
+	//
+	Idx = 0;
+	Cmd = 0xCB;
+	Buf[Idx++] = 0x39;
+	Buf[Idx++] = 0x2C;
+	Buf[Idx++] = 0x00;
+	Buf[Idx++] = 0x34;
+	Buf[Idx++] = 0x02;
+	wlcd_write(FLG_SEND_CMD|FLG_PULSE_CS_ON_START, Cmd, (uint32_t*)Buf, Idx);
+	//
+	Idx = 0;
+	Cmd = 0xF7;
+	Buf[Idx++] = 0x20;
+	wlcd_write(FLG_SEND_CMD|FLG_PULSE_CS_ON_START, Cmd, (uint32_t*)Buf, Idx);
+	//
+	Idx = 0;
+	Cmd = 0xEA;
+	Buf[Idx++] = 0x00;
+	Buf[Idx++] = 0x00;
+	wlcd_write(FLG_SEND_CMD|FLG_PULSE_CS_ON_START, Cmd, (uint32_t*)Buf, Idx);
+	//
+	Idx = 0;
+	Cmd = WLCD_POWER_CTRL_1;
+	Buf[Idx++] = 0x23; //VRH[5:0]
+	wlcd_write(FLG_SEND_CMD|FLG_PULSE_CS_ON_START, Cmd, (uint32_t*)Buf, Idx);
+	//
+	Idx = 0;
+	Cmd = WLCD_POWER_CTRL_2;
+	Buf[Idx++] = 0x10; //SAP[2:0];BT[3:0]
+	wlcd_write(FLG_SEND_CMD|FLG_PULSE_CS_ON_START, Cmd, (uint32_t*)Buf, Idx);
+	//
+	Idx = 0;
+	Cmd = WLCD_VCOM_CTRL_1;
+	Buf[Idx++] = 0x3E;
+	Buf[Idx++] = 0x28;
+	wlcd_write(FLG_SEND_CMD|FLG_PULSE_CS_ON_START, Cmd, (uint32_t*)Buf, Idx);
+	//
+	/* this command is missing in ILI9488_Preliminary_DS_V090.pdf so I've commented it out (my KeDei display module is working fine with or without it)
+	Idx = 0;
+	Cmd = WLCD_VCOM_CTRL_2;
+	Buf[Idx++] = 0x86;
+	wlcd_write(FLG_SEND_CMD|FLG_PULSE_CS_ON_START, Cmd, (uint32_t*)Buf, Idx);
+	*/
+	//
+	Cmd = WLCD_MEMORY_ACCESS_CTRL; //aka MADCTL
+	Buf[0] = ((WLCD_ROW_ADDR_ORDER)<<7) |
+			 ((WLCD_COL_ADDR_ORDER)<<6) |
+			 ((WLCD_ROW_COL_EXCHANGE)<<5) |
+			 ((WLCD_VERT_REFRESH_ORD)<<4) |
+			 ((WLCD_PANEL_BGR_ORDER)<<3) |
+			 ((WLCD_HORIZ_REFRESH_ORD)<<2);
+	wlcd_write(FLG_SEND_CMD|FLG_PULSE_CS_ON_START, Cmd, (uint32_t*)Buf, 1);
+	//
+	Idx = 0;
+	Cmd = WLCD_PIXEL_FORMAT_SET;
+	Buf[Idx++] = 0x55; //RGB Interface Format = 16 bits / pixel (R5G6B5), MCU Interface Format = 16 bits / pixel
+	wlcd_write(FLG_SEND_CMD|FLG_PULSE_CS_ON_START, Cmd, (uint32_t*)Buf, Idx);
+	//
+	Idx = 0;
+	Cmd = WLCD_FRAME_CTRL_NORMAL_MODE;
+	Buf[Idx++] = 0x00;
+	Buf[Idx++] = 0x18;
+	wlcd_write(FLG_SEND_CMD|FLG_PULSE_CS_ON_START, Cmd, (uint32_t*)Buf, Idx);
+	//
+	Idx = 0;
+	Cmd = WLCD_DISPLAY_FUNCTION_CTRL;
+	Buf[Idx++] = 0x08;
+	Buf[Idx++] = 0x82;
+	Buf[Idx++] = 0x27;
+	wlcd_write(FLG_SEND_CMD|FLG_PULSE_CS_ON_START, Cmd, (uint32_t*)Buf, Idx);
+	//
+	Idx = 0;
+	Cmd = 0xF2;
+	Buf[Idx++] = 0x00;
+	wlcd_write(FLG_SEND_CMD|FLG_PULSE_CS_ON_START, Cmd, (uint32_t*)Buf, Idx);
+	//
+	/* this command is missing in ILI9488_Preliminary_DS_V090.pdf so I've commented it out (my KeDei display module is working fine with or without it)
+	Idx = 0;
+	Cmd = WLCD_GAMMA_SET;
+	Buf[Idx++] = 0x01;
+	wlcd_write(FLG_SEND_CMD|FLG_PULSE_CS_ON_START, Cmd, (uint32_t*)Buf, Idx);
+	*/
+	//
+	Idx = 0;
+	Cmd = WLCD_POSITIVE_GAMMA_CORR;
+	Buf[Idx++] = 0x0F;
+	Buf[Idx++] = 0x31;
+	Buf[Idx++] = 0x2B;
+	Buf[Idx++] = 0x0C;
+	Buf[Idx++] = 0x0E;
+	Buf[Idx++] = 0x08;
+	Buf[Idx++] = 0x4E;
+	Buf[Idx++] = 0xF1;
+	Buf[Idx++] = 0x37;
+	Buf[Idx++] = 0x07;
+	Buf[Idx++] = 0x10;
+	Buf[Idx++] = 0x03;
+	Buf[Idx++] = 0x0E;
+	Buf[Idx++] = 0x09;
+	Buf[Idx++] = 0x00;
+	wlcd_write(FLG_SEND_CMD|FLG_PULSE_CS_ON_START, Cmd, (uint32_t*)Buf, Idx);
+	//
+	Idx = 0;
+	Cmd = WLCD_NEGATIVE_GAMMA_CORR;
+	Buf[Idx++] = 0x00;
+	Buf[Idx++] = 0x0E;
+	Buf[Idx++] = 0x14;
+	Buf[Idx++] = 0x03;
+	Buf[Idx++] = 0x11;
+	Buf[Idx++] = 0x07;
+	Buf[Idx++] = 0x31;
+	Buf[Idx++] = 0xC1;
+	Buf[Idx++] = 0x48;
+	Buf[Idx++] = 0x08;
+	Buf[Idx++] = 0x0F;
+	Buf[Idx++] = 0x0C;
+	Buf[Idx++] = 0x31;
+	Buf[Idx++] = 0x36;
+	Buf[Idx++] = 0x0F;
+	wlcd_write(FLG_SEND_CMD|FLG_PULSE_CS_ON_START, Cmd, (uint32_t*)Buf, Idx);
+	//
+	wlcd_cmd_only(WLCD_SLEEP_OUT);
+	vTaskDelay(120 / portTICK_RATE_MS); //([ms] / portTICK_RATE_MS)
+	//
+	wlcd_cmd_only(WLCD_DISP_ON);
+	//
+	free(Buf);
 #endif
 	//
 #ifdef WLCD_DO_DEBUG
+#ifndef WLCD_NO_READ
 	uint32_t WLCD_ALIGN4_ATTR Val32;
 	wlcd_read(FLG_SEND_CMD|FLG_PULSE_CS_ON_START, WLCD_READ_DISP_STATUS, 1, &Val32, 4);
 	DBG_WLCD("display status (hex): %02X %02X %02X %02X\n", ((uint8_t*)&Val32)[0], ((uint8_t*)&Val32)[1], ((uint8_t*)&Val32)[2], ((uint8_t*)&Val32)[3]);
+#endif
 #endif
 	//
 	return 0;
@@ -1181,10 +1346,14 @@ uint32_t ICACHE_FLASH_ATTR wlcd_img_get(uint32_t* Buf, uint16_t X, uint16_t Y, u
  * ! If WLCD_USE_HSPI is defined, then Buf must be 4-bytes aligned and allocated memory length must be multiples of 4.
  * Returns number of stored bytes into Buf (returned value / 2 = number of R5G6B5 pixels), 0 means no data bytes were read.
  */
+#ifndef WLCD_NO_READ
 	wlcd_set_drawing_rect(X, Y, Width, Height);
 	((uint16_t*)Buf)[0] = Width;
 	((uint16_t*)Buf)[1] = Height;
 	return wlcd_read(FLG_SEND_CMD|FLG_PULSE_CS_ON_START|FLG_DO_SHRINK_R6G6B6_TO_R5G6B5, WLCD_READ_DDRAM, 8, &Buf[1], (uint32_t)Width*Height*3);
+#else
+	return 0;
+#endif
 }
 
 //high level functions - text related

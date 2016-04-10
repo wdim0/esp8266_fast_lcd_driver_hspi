@@ -45,16 +45,16 @@
 
 //supported LCD controllers
 #define WLCD_ILI9341		0
-#define WLCD_ILI9488		1 //TODO (don't use yet)
+#define WLCD_ILI9488		1
 
 //======== WLCD MAIN CONFIG ========
-#define WLCD_DISPLAY				WLCD_ILI9341 //choose one of supported LCD controllers
+#define WLCD_DISPLAY				WLCD_ILI9488 //choose one of supported LCD controllers
 
 #define WLCD_ORIENTATION			90           //0 - default / 90 / 180 / 270 degrees of rotation (is managed only by setting the WLCD_MEMORY_ACCESS_CTRL aka MADCTL register => no SW rotation, no delay)
 #define WLCD_PANEL_BGR_ORDER		1            //0 - default, LCD panel has RGB order; 1 - LCD panel has BGR order (is not related to data shifted via SPI - there's still RGB order)
 
 #define	WLCD_USE_HSPI                            //use ESP8266's HSPI interface to communicate with LCD much faster. Comment it to use SW bit-banging - interface pins remain the same (see wlcd_init() for pin description)
-#define WLCD_SPI_CLK_PREDIV			1            //HSPI CLK = CPU_CLK_FREQ (80 MHz by default) / (SPI_CLK_PREDIV*SPI_CLK_CNTDIV) => 80 / 2 = 40 MHz
+#define WLCD_SPI_CLK_PREDIV			2            //HSPI CLK = CPU_CLK_FREQ (80 MHz by default) / (SPI_CLK_PREDIV*SPI_CLK_CNTDIV) => 80 / 2 = 40 MHz
 #define WLCD_SPI_CLK_CNTDIV			2            // ... (20 MHz: PREDIV=2, CNTDIV=2; 40 MHz: PREDIV=1, CNTDIV=2 (! not 2, 1); 80 MHz: PREDIV=1, CNTDIV=1)
 
 #define WLCD_GPIO_FOR_LCD_CS		15           //output GPIO for LCD CS (active L)
@@ -64,6 +64,8 @@
 #define WLCD_GPIO_FOR_LCD_MISO		12           //input GPIO for LCD MISO - intentionally chosen to be GPIO12, the same as HSPI_MISO, ...
 #define WLCD_GPIO_FOR_LCD_MOSI		13           //output GPIO for LCD MOSI - intentionally chosen to be GPIO13, the same as HSPI_MOSI, ...
 //--
+
+#define WLCD_NO_READ                             //uncomment this if your display module doesn't support reading operations - wlcd_img_get(...) will do nothing and return 0 (KeDei 3.5" module)
 
 //#define WLCD_DO_DEBUG                            //uncomment this to output basic debug level msgs on TxD
 
