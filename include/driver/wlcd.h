@@ -27,7 +27,7 @@
  *	|                           |           |                            |
  *	|       MTDO/GPIO15/HSPI_CS |----->-----| CS (active L)              |
  *	|     MTCK/GPIO13/HSPI_MOSI |----->-----| MOSI                       |
- *	|     MTDI/GPIO12/HSPI_MISO |-----<-----| MISO                       |
+ *	|     MTDI/GPIO12/HSPI_MISO |-----<-----| MISO (optional)            |
  *	|      MTMS/GPIO14/HSPI_CLK |----->-----| CLK (leading edge, act. H) |
  *	|                     GPIO4 |----->-----| D/C (data H / command L)   |
  *   ---------------------------             ----------------------------
@@ -54,7 +54,7 @@
 #define WLCD_PANEL_BGR_ORDER		1            //0 - default, LCD panel has RGB order; 1 - LCD panel has BGR order (is not related to data shifted via SPI - there's still RGB order)
 
 #define	WLCD_USE_HSPI                            //use ESP8266's HSPI interface to communicate with LCD much faster. Comment it to use SW bit-banging - interface pins remain the same (see wlcd_init() for pin description)
-#define WLCD_SPI_CLK_PREDIV			2            //HSPI CLK = CPU_CLK_FREQ (80 MHz by default) / (SPI_CLK_PREDIV*SPI_CLK_CNTDIV) => 80 / 2 = 40 MHz
+#define WLCD_SPI_CLK_PREDIV			1            //HSPI CLK = CPU_CLK_FREQ (80 MHz by default) / (SPI_CLK_PREDIV*SPI_CLK_CNTDIV) => 80 / 2 = 40 MHz
 #define WLCD_SPI_CLK_CNTDIV			2            // ... (20 MHz: PREDIV=2, CNTDIV=2; 40 MHz: PREDIV=1, CNTDIV=2 (! not 2, 1); 80 MHz: PREDIV=1, CNTDIV=1)
 
 #define WLCD_GPIO_FOR_LCD_CS		15           //output GPIO for LCD CS (active L)
