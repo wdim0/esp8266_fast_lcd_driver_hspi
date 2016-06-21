@@ -38,15 +38,15 @@ In HSPI you can change CS and D/C GPIOs.
 Fonts are implemented using RREs (each letter is represented by rectangle(s), minimum possible). This gives us speed, easy font zooming / making font bolder, ...<br />
 Fonts with code page 437 (USA, original IBM PC hardware) and code page 1250 (Central and East European Latin) included. If you need your own fonts / code pages, use fonter.c included as a starting point and assemble your own wlcd_font_*.h
 
-RGB mode is 16-bits per pixel ONLY, because we want to be as fast as possible (many optimizations take advance of the fact, that we can move exactly two pixels by one 32-bit move). That's why also <b>WLCD image</b> format (use wlcd_img_gen to generate from 24-bit of 16-bit BMPs (TODO - need linux port of this tool)) knows only 16 bpp images. WLCD image can be (and in most cases is) RLE compressed (8-bit counter).
+RGB mode is 16-bits per pixel ONLY, because we want to be as fast as possible (many optimizations take advantage of the fact, that we can move exactly two pixels by one 32-bit move). That's why also <b>WLCD image</b> format (use wlcd_img_gen to generate from 24-bit of 16-bit BMPs (TODO - need linux port of this tool)) generates only 16 bpp images. WLCD image can be (and in most cases is) RLE compressed (8-bit counter). The WLCD image format was created epspecially for this driver to speed things up and to provide some basic compression. Use images with not much smooth gradients, then the RLE works really good. By default, the generator creates both uncompressed and compressed version of the image and compares what's smaller.
 
-Function for drawing a line is heavily optimized for speed (addition of fixed point with precalculations, repeating of preconfigured HSPI transaction, ...). The speed-up is the more significant, the more the line is horizontal or vertical. Diagonal lines are the slowest (there is no other way than re-set drawing point for every pixel using wlcd_set_drawing_rect(...) (SET_COLUMN_ADDR_RANGE + SET_ROW_ADDR_RANGE)).
+Function for drawing a line is heavily optimized for speed (using integer variables (not float) and using only addition (not multiplication or division) with precalculations, repeating of preconfigured HSPI transaction, ...). The speed-up is the more significant, the more the line is horizontal or vertical. Diagonal lines are the slowest (because of how the ILI* LCD drivers work, there is no other way than re-set drawing point for every pixel using wlcd_set_drawing_rect(...) (SET_COLUMN_ADDR_RANGE + SET_ROW_ADDR_RANGE)).
 
 Orientation can be changed in 0 / 90 / 180 / 270 degrees of rotation (see "WLCD MAIN CONFIG" section in wlcd.h).
 
-Reading of display data RAM right into R5G6B5 buffer of pixels is implemented (conversion of R6G6B6 to R5G6B5 on the fly).
+Reading of display data RAM right into R5G6B5 buffer of pixels is implemented also (conversion of R6G6B6 to R5G6B5 on the fly). This is optional, since the MISO line is also optional.
 
-Demo included
+Demo (see YT video) included.
 
 ##Provided functions
 
