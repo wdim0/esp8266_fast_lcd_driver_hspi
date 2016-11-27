@@ -114,7 +114,9 @@ If you follow the steps correctly, you have everything you need and everything w
 ![](https://raw.githubusercontent.com/wdim0/esp8266_fast_lcd_driver_hspi/master/eclipse_import_01.png)
 ![](https://raw.githubusercontent.com/wdim0/esp8266_fast_lcd_driver_hspi/master/eclipse_import_02.png)
 
-<b>5]</b> before you compile! (if you're going to compile "NON-OS" version) - we need to update the Espressif's eagle_soc.h, because it's not complete. More complete definition was created by me using "pin_mux_register.h" from RTOS SDK. We need this to be able to work with ESP8266's HSPI interface. So make a backup of original "c:\Espressif\ESP8266_SDK\include\eagle_soc.h" and overwrite it with "c:\Espressif\devel\esp8266_fast_lcd_driver_hspi\WLCD_for_NONOS_(tested_with_2_0_0)\modified_NONOS_SDK_files_(overwrite_original)\include\eagle_soc.h"
+<b>5]</b> before you compile! (if you're going to compile "NON-OS" version)
+- we need to update the Espressif's eagle_soc.h, because it's not complete. More complete definition was created by me using "pin_mux_register.h" from RTOS SDK. We need this to be able to work with ESP8266's HSPI interface. So make a backup of original "c:\Espressif\ESP8266_SDK\include\eagle_soc.h" and overwrite it with "...\modified_NONOS_SDK_files_(overwrite_original)\include\eagle_soc.h"<br />
+- we need to copy "...\modified_NONOS_SDK_files_(overwrite_original)\include\espmissingincludes.h" into "c:\Espressif\ESP8266_SDK\include". This is because Espressif even in new SDK 2.0.0 still don't include quite basic things we could also use. This problem is well known and espmissingincludes.h is handy, that's why we're copying it directly into SDK directory
 
 <b>6]</b> at last! double-click rebuild. Everything should be compiled without errors and you should end up with *.bin files in "...\firmware" directory<br />
 ![](https://raw.githubusercontent.com/wdim0/esp8266_fast_lcd_driver_hspi/master/eclipse_import_03.png)
