@@ -4,14 +4,17 @@ program wlcd_img_gen;
 
 {
  * Created by Martin Winkelhofer 03/2016
- * W-Dimension / wdim / wdim0 / maarty.w@gmail.com
+ * W-Dimension / wdim / wdim0 / winkelhofer.m@gmail.com / https://github.com/wdim0
  *  _      ____   ________      _
  * | | /| / / /  / ___/ _ \    (_)_ _  ___ _    ___ ____ ___
  * | |/ |/ / /__/ /__/ // /   / /  ' \/ _ `/   / _ `/ -_) _ \
  * |__/|__/____/\___/____/   /_/_/_/_/\_, /    \_, /\__/_//_/
  *                                   /___/    /___/
+ * Generator of binary files that are understood by WLCD system as compressed images.
+ * (see wlcd.h / wlcd.c)
+ * v1.2 (03/2016)
  *
- * This file is part of WLCD - W-Dimension's LCD driver (for ESP8266).
+ * This file is part of WLCD - W-Dimension's LCD driver for ESP8266.
  *
  * WLCD is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -65,7 +68,7 @@ end;
 
 begin
   Writeln(Output,APP_NAME+', created by Martin Winkelhofer 03/2016');
-  Writeln(Output,'W-Dimension / wdim / wdim0 / maarty.w@gmail.com');
+  Writeln(Output,'W-Dimension / wdim / wdim0 / winkelhofer.m@gmail.com / https://github.com/wdim0');
   if(ParamCount<2) then begin
     Writeln(Output,'----------------');
     Writeln(Output,'Usage:');

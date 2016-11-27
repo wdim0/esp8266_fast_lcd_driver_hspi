@@ -1,16 +1,20 @@
 #ILI9341 / ILI9486 / ILI9488 LCD driver for ESP8266
 
 <b>Fast LCD driver written from scratch for ESP8266 to communicate with ILI9341 (240x320) or ILI9486 / ILI9488 (320x480) compatible LCD controllers</b> using ESP8266's HSPI (full 16 x 32-bit buffer) or SW bit-banging.<br />
-Maximum effort was taken to create a fast driver.<br />
-(tested with ESP8266_RTOS_SDK 1.4.0)
+Maximum effort was taken to create a fast driver (image, text, line drawing should be fast).<br />
+Two versions are available:<br />
+- for ESP8266_NONOS_SDK 2.0.0<br />
+- for ESP8266_RTOS_SDK 1.5.0<br /><br />
 
 <b>ESP8266 with 2.4" LCD module (320x240, SPI, CLK 40 MHz) - video</b><br>
 [![ESP8266 with 2.4" LCD module (320x240, SPI, CLK 40 MHz)](http://img.youtube.com/vi/E9Ds4IS-Ndk/1.jpg)](http://www.youtube.com/watch?v=E9Ds4IS-Ndk)<br>
 <b>ESP8266 with hacked 3.5" KeDei LCD module (480x320, SPI, CLK 20 MHz) - video</b><br>
 [![ESP8266 with hacked 3.5" KeDei LCD module (480x320, SPI, CLK 20 MHz)](http://img.youtube.com/vi/NzYD4sONz20/1.jpg)](http://www.youtube.com/watch?v=NzYD4sONz20)
+<b>ESP8266 with ER-TFT035-6 - 3.5" LCD module from www.buydisplay.com (480x320, SPI, CLK ? MHz) - TODO video</b><br>
 
 ##Connection with LCD controller
 
+	            4-wire SPI interface (5-wire with optional MISO)
 	 ---------------------------             ----------------------------
 	|          ESP8266          |           |       LCD controller       |
 	|          (master)         |           |           (slave)          |
@@ -38,15 +42,15 @@ In HSPI you can change CS and D/C GPIOs.
 Fonts are implemented using RREs (each letter is represented by rectangle(s), minimum possible). This gives us speed, easy font zooming / making font bolder, ...<br />
 Fonts with code page 437 (USA, original IBM PC hardware) and code page 1250 (Central and East European Latin) included. If you need your own fonts / code pages, use fonter.c included as a starting point and assemble your own wlcd_font_*.h
 
-RGB mode is 16-bits per pixel ONLY, because we want to be as fast as possible (many optimizations take advantage of the fact, that we can move exactly two pixels by one 32-bit move). That's why also <b>WLCD image</b> format (use wlcd_img_gen to generate from 24-bit of 16-bit BMPs (TODO - need linux port of this tool)) generates only 16 bpp images. WLCD image can be (and in most cases is) RLE compressed (8-bit counter). The WLCD image format was created epspecially for this driver to speed things up and to provide some basic compression. Use images with not much smooth gradients, then the RLE works really good. By default, the generator creates both uncompressed and compressed version of the image and compares what's smaller.
+RGB mode is 16-bits per pixel ONLY, because we want to be as fast as possible (many optimizations take advance of the fact, that we can move exactly two pixels by one 32-bit move). That's why also <b>WLCD image</b> format (use wlcd_img_gen to generate from 24-bit of 16-bit BMPs (TODO - need linux port of this tool)) knows only 16 bpp images. WLCD image can be (and in most cases is) RLE compressed (8-bit counter).
 
-Function for drawing a line is heavily optimized for speed (using integer variables (not float) and using only addition (not multiplication or division) with precalculations, repeating of preconfigured HSPI transaction, ...). The speed-up is the more significant, the more the line is horizontal or vertical. Diagonal lines are the slowest (because of how the ILI* LCD drivers work, there is no other way than re-set drawing point for every pixel using wlcd_set_drawing_rect(...) (SET_COLUMN_ADDR_RANGE + SET_ROW_ADDR_RANGE)).
+Function for drawing a line is heavily optimized for speed (addition of fixed point with precalculations, repeating of preconfigured HSPI transaction, ...). The speed-up is the more significant, the more the line is horizontal or vertical. Diagonal lines are the slowest (there is no other way than re-set drawing point for every pixel using wlcd_set_drawing_rect(...) (SET_COLUMN_ADDR_RANGE + SET_ROW_ADDR_RANGE)).
 
 Orientation can be changed in 0 / 90 / 180 / 270 degrees of rotation (see "WLCD MAIN CONFIG" section in wlcd.h).
 
-Reading of display data RAM right into R5G6B5 buffer of pixels is implemented also (conversion of R6G6B6 to R5G6B5 on the fly). This is optional, since the MISO line is also optional.
+Reading of display data RAM right into R5G6B5 buffer of pixels is implemented (conversion of R6G6B6 to R5G6B5 on the fly).
 
-Demo (see YT video) included.
+Demo included
 
 ##Provided functions
 
@@ -92,3 +96,35 @@ Demo (see YT video) included.
 	uint16_t ICACHE_FLASH_ATTR wlcd_text_nrows_height(uint16_t NumOfRows, wlcd_text_draw_settings_struct* S);
 
 (see wlcd.c for details)	
+
+##Installation, compilation, programming
+
+As my development IDE I'm using Eclipse on Win 7 with Espressif's NON-OS SDK (/ RTOS SDK) and my ESP8266 (ESP-07 or any other ESP-* module) is programmed using "FTDI FT232RL USB to TTL Serial Converter". So this installation guide is for those who have / want to have the same development IDE.
+
+<b>1]</b> download "Unofficial Development Kit for Espressif ESP8266":<br />
+http://www.esp8266.com/viewtopic.php?t=820<br />
+(big thanks to Mikhail Grigorev / CHERTS)<br />
+If you follow the steps correctly, you have everything you need and everything works right out of the box<br /><br />
+
+<b>2]</b> get familiar with Eclipse just a little bit. Try to compile & run at least "hello_world" or "blinky2" examples<br /><br />
+
+<b>3]</b> download my "esp8266_fast_lcd_driver_hspi" repo as a zip file, unpack to some directory (let's suppose for example "c:\Espressif\devel\esp8266_fast_lcd_driver_hspi")<br /><br />
+
+<b>4]</b> open Eclipse, go to menu File -> Import ... and double-click on item "General->Existing Projects into Workspace". Then select root directory - the path where you've unzipped my repo ("c:\Espressif\devel\esp8266_fast_lcd_driver_hspi"), click Finish
+![](https://raw.githubusercontent.com/wdim0/esp8266_fast_lcd_driver_hspi/master/eclipse_import_01.png)
+![](https://raw.githubusercontent.com/wdim0/esp8266_fast_lcd_driver_hspi/master/eclipse_import_02.png)
+<br /><br />
+
+<b>5]</b> before you compile! (if you're going to compile "NON-OS" version) - we need to update the Espressif's eagle_soc.h, because it's not complete. More complete definition was created by me using "pin_mux_register.h" from RTOS SDK. We need this to be able to work with ESP8266's HSPI interface. So make a backup of original "c:\Espressif\ESP8266_SDK\include\eagle_soc.h" and overwrite it with "c:\Espressif\devel\esp8266_fast_lcd_driver_hspi\WLCD_for_NONOS_(tested_with_2_0_0)\modified_NONOS_SDK_files_(overwrite_original)\include\eagle_soc.h"<br /><br />
+
+<b>6]</b> at last! double-click recompile. Everything should be compiled without errors and you should end up with *.bin files in "...\firmware" directory
+![](https://raw.githubusercontent.com/wdim0/esp8266_fast_lcd_driver_hspi/master/eclipse_import_03.png)
+<br /><br />
+
+<b>7]</b> flash the *.bin files into the ESP8266 using your favourite programmer<br />
+	eagle.flash.bin-------->0x00000
+	eagle.irom0text.bin---->0x10000
+<br />
+<b>8]</b> if you've connected the LCD to the ESP8266 (see section "Connection with LCD controller" above) and everything is working ok, you should see the WLCD demo on the display (if not, see next step)<br /><br />
+
+<b>9]</b> try to play with "WLCD_SPI_CLK_PREDIV" and "WLCD_SPI_CLK_CNTDIV" constants in "...\include\driver\wlcd.h" - this will influence the HSPI clock. If you don't see the WLCD demo properly, try to decrease the speed, recompile, programm new *.bin files
