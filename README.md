@@ -6,11 +6,11 @@ Two versions are available:<br />
 - for ESP8266_NONOS_SDK 2.0.0<br />
 - for ESP8266_RTOS_SDK 1.5.0<br /><br />
 
-<b>ESP8266 with 2.4" LCD module (320x240, SPI, CLK 40 MHz) - video</b><br>
-[![ESP8266 with 2.4" LCD module (320x240, SPI, CLK 40 MHz)](http://img.youtube.com/vi/E9Ds4IS-Ndk/1.jpg)](http://www.youtube.com/watch?v=E9Ds4IS-Ndk)<br>
-<b>ESP8266 with hacked 3.5" KeDei LCD module (480x320, SPI, CLK 20 MHz) - video</b><br>
-[![ESP8266 with hacked 3.5" KeDei LCD module (480x320, SPI, CLK 20 MHz)](http://img.youtube.com/vi/NzYD4sONz20/1.jpg)](http://www.youtube.com/watch?v=NzYD4sONz20)
-<b>ESP8266 with ER-TFT035-6 - 3.5" LCD module from www.buydisplay.com (480x320, SPI, CLK ? MHz) - TODO video</b><br>
+<b>ESP8266 with 2.4" LCD module (320x240, SPI, CLK 40 MHz) - video</b><br />
+[![ESP8266 with 2.4" LCD module (320x240, SPI, CLK 40 MHz)](http://img.youtube.com/vi/E9Ds4IS-Ndk/1.jpg)](http://www.youtube.com/watch?v=E9Ds4IS-Ndk)<br />
+<b>ESP8266 with hacked 3.5" KeDei LCD module (480x320, SPI, CLK 20 MHz) - video</b><br />
+[![ESP8266 with hacked 3.5" KeDei LCD module (480x320, SPI, CLK 20 MHz)](http://img.youtube.com/vi/NzYD4sONz20/1.jpg)](http://www.youtube.com/watch?v=NzYD4sONz20)<br />
+<b>ESP8266 with ER-TFT035-6 - 3.5" LCD module from www.buydisplay.com (480x320, SPI, CLK ? MHz) - TODO video</b>
 
 ##Connection with LCD controller
 
