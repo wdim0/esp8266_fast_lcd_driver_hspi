@@ -97,34 +97,33 @@ Demo included
 
 (see wlcd.c for details)	
 
-##Installation, compilation, programming
+##Installation, compilation, programming the FLASH
 
 As my development IDE I'm using Eclipse on Win 7 with Espressif's NON-OS SDK (/ RTOS SDK) and my ESP8266 (ESP-07 or any other ESP-* module) is programmed using "FTDI FT232RL USB to TTL Serial Converter". So this installation guide is for those who have / want to have the same development IDE.
 
 <b>1]</b> download "Unofficial Development Kit for Espressif ESP8266":<br />
 http://www.esp8266.com/viewtopic.php?t=820<br />
 (big thanks to Mikhail Grigorev / CHERTS)<br />
-If you follow the steps correctly, you have everything you need and everything works right out of the box<br /><br />
+If you follow the steps correctly, you have everything you need and everything works right out of the box
 
-<b>2]</b> get familiar with Eclipse just a little bit. Try to compile & run at least "hello_world" or "blinky2" examples<br /><br />
+<b>2]</b> get familiar with Eclipse just a little bit. Try to compile & run at least "hello_world" or "blinky2" examples
 
-<b>3]</b> download my "esp8266_fast_lcd_driver_hspi" repo as a zip file, unpack to some directory (let's suppose for example "c:\Espressif\devel\esp8266_fast_lcd_driver_hspi")<br /><br />
+<b>3]</b> download my "esp8266_fast_lcd_driver_hspi" repo as a zip file, unpack to some directory (let's suppose for example "c:\Espressif\devel\esp8266_fast_lcd_driver_hspi")
 
-<b>4]</b> open Eclipse, go to menu File -> Import ... and double-click on item "General->Existing Projects into Workspace". Then select root directory - the path where you've unzipped my repo ("c:\Espressif\devel\esp8266_fast_lcd_driver_hspi"), click Finish
+<b>4]</b> open Eclipse, go to menu File -> Import ... and double-click on item "General->Existing Projects into Workspace". Then select root directory - the path where you've unzipped my repo ("c:\Espressif\devel\esp8266_fast_lcd_driver_hspi"), click Finish<br />
 ![](https://raw.githubusercontent.com/wdim0/esp8266_fast_lcd_driver_hspi/master/eclipse_import_01.png)
 ![](https://raw.githubusercontent.com/wdim0/esp8266_fast_lcd_driver_hspi/master/eclipse_import_02.png)
-<br /><br />
 
-<b>5]</b> before you compile! (if you're going to compile "NON-OS" version) - we need to update the Espressif's eagle_soc.h, because it's not complete. More complete definition was created by me using "pin_mux_register.h" from RTOS SDK. We need this to be able to work with ESP8266's HSPI interface. So make a backup of original "c:\Espressif\ESP8266_SDK\include\eagle_soc.h" and overwrite it with "c:\Espressif\devel\esp8266_fast_lcd_driver_hspi\WLCD_for_NONOS_(tested_with_2_0_0)\modified_NONOS_SDK_files_(overwrite_original)\include\eagle_soc.h"<br /><br />
+<b>5]</b> before you compile! (if you're going to compile "NON-OS" version) - we need to update the Espressif's eagle_soc.h, because it's not complete. More complete definition was created by me using "pin_mux_register.h" from RTOS SDK. We need this to be able to work with ESP8266's HSPI interface. So make a backup of original "c:\Espressif\ESP8266_SDK\include\eagle_soc.h" and overwrite it with "c:\Espressif\devel\esp8266_fast_lcd_driver_hspi\WLCD_for_NONOS_(tested_with_2_0_0)\modified_NONOS_SDK_files_(overwrite_original)\include\eagle_soc.h"
 
-<b>6]</b> at last! double-click recompile. Everything should be compiled without errors and you should end up with *.bin files in "...\firmware" directory
+<b>6]</b> at last! double-click recompile. Everything should be compiled without errors and you should end up with *.bin files in "...\firmware" directory<br />
 ![](https://raw.githubusercontent.com/wdim0/esp8266_fast_lcd_driver_hspi/master/eclipse_import_03.png)
-<br /><br />
 
-<b>7]</b> flash the *.bin files into the ESP8266 using your favourite programmer<br />
+<b>7]</b> flash the *.bin files into the ESP8266 using your favourite programmer
+
 	eagle.flash.bin-------->0x00000
 	eagle.irom0text.bin---->0x10000
-<br />
-<b>8]</b> if you've connected the LCD to the ESP8266 (see section "Connection with LCD controller" above) and everything is working ok, you should see the WLCD demo on the display (if not, see next step)<br /><br />
+
+<b>8]</b> if you've connected the LCD to the ESP8266 (see section "Connection with LCD controller" above) and everything is working ok, you should see the WLCD demo on the display (if not, see next step)
 
 <b>9]</b> try to play with "WLCD_SPI_CLK_PREDIV" and "WLCD_SPI_CLK_CNTDIV" constants in "...\include\driver\wlcd.h" - this will influence the HSPI clock. If you don't see the WLCD demo properly, try to decrease the speed, recompile, programm new *.bin files
