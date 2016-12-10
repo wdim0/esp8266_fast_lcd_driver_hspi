@@ -187,4 +187,15 @@ common_rtos.mk:
 
 <b>8]</b> if you've connected the LCD to the ESP8266 (see section "Connection with LCD controller" above) and everything is working ok, you should see the WLCD demo on the display (if not, see next step)
 
-<b>9]</b> try to play with "WLCD_SPI_CLK_PREDIV" and "WLCD_SPI_CLK_CNTDIV" constants in "...\include\driver\wlcd.h" - this will influence the HSPI clock. If you don't see the WLCD demo properly, try to decrease the speed, rebuild, flash the new *.bin files
+<b>9]</b> if you don't see the WLCD demo properly, <b>try to play with main settings in "...\include\driver\wlcd.h"</b>. Try to decrease the speed / change color depth / ... then <b>repeat steps 6], 7]</b><br />
+Especially these are important (there are more, but start with these):
+
+	//==== main config of WLCD (edit only here)
+	#define WLCD_DISPLAY			WLCD_ILI9488 //choose one of supported LCD controllers
+	#define WLCD_BPP				WLCD_18BPP   //choose one of supported color depths - ! WLCD images must correspond
+	#define WLCD_PANEL_BGR_ORDER	1            //0 - default, LCD panel has RGB order; 1 - LCD panel has BGR order (is not related to data shifted via SPI - there's still RGB order)
+	#define	WLCD_USE_HSPI                        //use ESP8266's HSPI interface to communicate with LCD much faster. Comment the definition to use SW bit-banging - interface pins remain the same (see wlcd_init() for pin description)
+	#define WLCD_SPI_CLK_PREDIV		1            //HSPI CLK = CPU_CLK_FREQ (80 MHz by default) / (SPI_CLK_PREDIV*SPI_CLK_CNTDIV) => 80 / 2 = 40 MHz
+	#define WLCD_SPI_CLK_CNTDIV		2            // ... (20 MHz: PREDIV=2, CNTDIV=2; 40 MHz: PREDIV=1, CNTDIV=2 (! not 2, 1); 80 MHz: PREDIV=1, CNTDIV=1)
+	//#define WLCD_NO_READ                       //uncomment this if the interface doesn't support reading operations - wlcd_img_get(...) will do nothing and return 0 (KeDei 3.5" LCD module uses shift registers => is unidirectional)
+	//==== (don't edit below this point)
