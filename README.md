@@ -1,17 +1,17 @@
 #ILI9341 / ILI9486 / ILI9488 LCD driver for ESP8266
 
 <b>Fast LCD driver written from scratch for ESP8266 for driving ILI9341 (240x320) or ILI9486 / ILI9488 (320x480) compatible LCD controllers using 4-wire SPI interface.</b> ESP8266's HSPI interface is used (full 16 x 32-bit buffer). There's also option for full SW bit-banging (for any GPIOs, but it's slower than HSPI. Use HSPI whenever possible).<br />
-Maximum effort was taken to create a fast driver, because managing 480x320 pixels over 4-wire SPI is timing critical (just pixel data to fill whole 480x320 screen will take 2.46 Mbit for 16 bpp color depth and 3.69 Mbit for 18 bpp color depth mode (24 bits are used per pixel in 18 bpp mode, 2 LSBs from each byte are ignored by LCD controller) and we need to clock out this amount of bits in a fraction of second over the serial line!)
+Maximum effort was taken to create a fast driver, because managing 480x320 pixels over 4-wire SPI is timing critical (just pixel data to fill whole 480x320 screen will take 2.46 Mbit for 16 bpp color depth mode and 3.69 Mbit for 18 bpp color depth mode (24 bits per pixel are used in 18 bpp mode, 2 LSBs from each byte are ignored by LCD controller) and we need to clock out this amount of bits in a fraction of second over the serial line)
 
 Two versions are available:
 - for ESP8266_NONOS_SDK 2.0.0
 - for ESP8266_RTOS_SDK 1.5.0
 
-<b>ESP8266 @ 80 MHz with 2.4" LCD module (320x240, 16bpp, HSPI CLK 40 MHz) - video</b><br />
-[![ESP8266 @ 80 MHz with 2.4" LCD module (320x240, 16bpp, HSPI CLK 40 MHz)](http://img.youtube.com/vi/E9Ds4IS-Ndk/1.jpg)](http://www.youtube.com/watch?v=E9Ds4IS-Ndk)<br />
-<b>ESP8266 @ 80 MHz with hacked 3.5" KeDei LCD module v4.0 (480x320, 16bpp, HSPI CLK 20 MHz) - video</b><br />
-[![ESP8266 @ 80 MHz with hacked 3.5" KeDei LCD module v4.0 (480x320, 16bpp, HSPI CLK 20 MHz)](http://img.youtube.com/vi/NzYD4sONz20/1.jpg)](http://www.youtube.com/watch?v=NzYD4sONz20)<br />
-<b>ESP8266 @ 80 MHz with ER-TFT035-6 - 3.5" LCD module from www.buydisplay.com (480x320, 18bpp, HSPI CLK 40 MHz) - TODO video</b>
+<b>ESP8266 @ 80 MHz with 2.4" LCD module (320x240, 16 bpp, HSPI CLK 40 MHz) - video</b><br />
+[![ESP8266 @ 80 MHz with 2.4" LCD module (320x240, 16 bpp, HSPI CLK 40 MHz)](http://img.youtube.com/vi/E9Ds4IS-Ndk/1.jpg)](http://www.youtube.com/watch?v=E9Ds4IS-Ndk)<br />
+<b>ESP8266 @ 80 MHz with hacked 3.5" KeDei LCD module v4.0 (480x320, 16 bpp, HSPI CLK 20 MHz) - video</b><br />
+[![ESP8266 @ 80 MHz with hacked 3.5" KeDei LCD module v4.0 (480x320, 16 bpp, HSPI CLK 20 MHz)](http://img.youtube.com/vi/NzYD4sONz20/1.jpg)](http://www.youtube.com/watch?v=NzYD4sONz20)<br />
+<b>ESP8266 @ 80 MHz with ER-TFT035-6 - 3.5" LCD module from www.buydisplay.com (480x320, 18 bpp, HSPI CLK 40 MHz) - TODO video</b>
 
 ##Connection with LCD controller
 
@@ -29,11 +29,11 @@ Two versions are available:
 	|                           |            | (for other pins see PDF manual)  |
 	 ---------------------------              ----------------------------------
 
-<b>SPI interface:</b><br />
+<b>SPI interface</b><br />
 
 If WLCD_USE_HSPI is defined (fast, less CPU load):
 - you can change only GPIOs for #CS and D/#C. The rest (HSPI controller) is hardwired inside ESP8266
-- ! WLCD_SPI_CLK_PREDIV and WLCD_SPI_CLK_CNTDIV determines the speed of HSPI clock (configure properly / test to match your LCD controller specification)
+- WLCD_SPI_CLK_PREDIV and WLCD_SPI_CLK_CNTDIV determines the speed of HSPI clock - configure properly / test to match your LCD controller specification
 
 If WLCD_USE_HSPI is not defined (SW bit-banging, slower, bigger CPU load):
 - you can change all GPIOs (see WLCD MAIN CONFIG section in wlcd.h)
@@ -42,50 +42,51 @@ If WLCD_USE_HSPI is not defined (SW bit-banging, slower, bigger CPU load):
 ##Main features
 
 <b>Hardware HSPI / SW bit-banging</b><br />
-In HSPI mode (using ESP8266's HSPI hardware module) the whole 16 x 32-bit buffer (SPI_W0..15) is used for MISO/MOSI transactions and we're using 32-bit copy instructions to speed up the copy process.<br />
-There's tradeoff because of that - if we're drawing image which is not RLE compressed (is just a continuous stream of R5G6B5 pixels) and we're using HSPI mode, then image data buffer must be 4-bytes aligned and allocated memory length must be multiples of 4.
+In HSPI mode (WLCD_USE_HSPI is defined, fast, less CPU load) we're using ESP8266's HSPI hardware module. The whole 16 x 32-bit buffer (SPI_W0..15) is used for MISO/MOSI transactions and we're using 32-bit copy instructions to speed up the copy process.<br />
+There's tradeoff because of that - if we're drawing image which is not RLE compressed (is just a continuous stream of R5G6B5 pixels) and we're using HSPI mode, then image data buffer must be 4-bytes aligned and allocated memory length must be multiples of 4.<br />
+You can choose the best suitable HSPI clock using WLCD_SPI_CLK_PREDIV and WLCD_SPI_CLK_CNTDIV (see "WLCD MAIN CONFIG" section in wlcd.h). Most of the displays are happy up to 40 MHz SPI clock (including), see YT videos on the top.
 
-You can choose the best suitable HSPI clock using WLCD_SPI_CLK_PREDIV and WLCD_SPI_CLK_CNTDIV (see "WLCD MAIN CONFIG" section in wlcd.h). Most of the displays are happy up to 40 MHz SPI clock (including), see YT video on the top.
+In SW bit-banging mode (WLCD_USE_HSPI is not defined, slower, bigger CPU load), all the GPIOs are managed by SW. This approach is significantly slower. It's implemented just for the critical situations when you've already used the ESP8266's pins GPIO13, GPIO12 (optional), GPIO14 for something else and you have no option to re-wire it to different GPIOs.
 
-<b>Color depth:</b><br />
+<b>Color depth</b><br />
 Supported color depths are 16-bits / 18-bits per pixel (command 0x3A sets DBI[2:0] to 101 or 110).
-Primary color depth is 16bpp - USE WLCD_16BPP FOR MAXIMUM SPEED (many optimizations take
+Primary color depth is 16 bpp - <b>use WLCD_16BPP for maximum speed</b> (many optimizations take
 advance of the fact, that we can move exactly two pixels by one 32-bit move).<br />
-Note: ILI9488 doesn't support 16bpp in SPI mode (DBI Type C mode), it supports
-only 3bpp (DBI[2:0] = 001) and 18bpp (DBI[2:0] = 110). Ask ILItek why it was not implemented.
-ILI9341 supports both 16bpp and 18bpp in SPI mode.
-In hacked 3.5" KeDei LCD module v4.0 we're using 16bpp, because the real data input into ILI9488 is 8-bit parallel (IM[2:0] = 011). See my https://github.com/wdim0/esp8266_with_KeDei_lcd_module repo for details.
+Note: ILI9488 doesn't support 16 bpp in SPI mode (DBI Type C mode), it supports
+only 3 bpp (DBI[2:0] = 001) and 18 bpp (DBI[2:0] = 110). Ask ILItek why it was not implemented in ILI9488.
+Compared to that, ILI9341 supports both 16 bpp and 18 bpp in SPI mode and it has only 320x240 pixels. Funny, that ILItek removed the faster way in more demanding controller.<br />
+Note2: in hacked 3.5" KeDei LCD module v4.0 we can use 16 bpp, because the real data input into ILI9488 is 8-bit parallel (IM[2:0] = 011). See my https://github.com/wdim0/esp8266_with_KeDei_lcd_module repo for details.
 
-<b>WLCD images:</b><br />
-Use wlcd_img_gen tool to generate WLCD images from 24-bit / 16-bit BMPs. WLCD image can be
-RLE compressed (uses 8-bit counter). The wlcd_img_gen tool by default tries both ways
-and decides what's smaller. To produce smaller images, try to avoid smooth color gradients.
-
-! WLCD images can be 16bpp / 24bpp and this setting must correspond to used WLCD_*BPP !
-- if you use WLCD_16BPP, generate WLCD image with parameter --16bpp
-- if you use WLCD_18BPP, generate WLCD image with parameter --24bpp
-
-See function wlcd_img_draw(...) for WLCD image format description
-
-<b>uint32_t Color and related macros:</b><br />
-General meaning of Color parameter used in many functions:
-Actual Color meaning is related to WLCD_BPP mode (see config section above).
+<b>uint32_t Color and related macros</b><br />
+General meaning of Color parameter used in many functions is related to used WLCD_*BPP mode (see config section above).
 It's uint32_t to make it universal for all color depths.
 - if WLCD_BPP==WLCD_16BPP => Color is of wlcd_R5G6B5_struct structure / uint32_t filled by R5G6B5
 - if WLCD_BPP==WLCD_18BPP => Color is of wlcd_R8G8B8_struct structure / uint32_t filled by R6G6B6 or R8G8B8 (R6G6B6 or R8G8B8 are the same - last two bits are ignored by the LCD controller)
 
-Use WLCD_RGB_TO_COLOR(...) macro to get uint32_t Color using R, G, B 8-bit values.
+Use WLCD_RGB_TO_COLOR(...) macro to get uint32_t Color using R, G, B 8-bit values.<br />
 Use WLCD_COLOR(...) macro to convert wlcd_R5G6B5_struct / wlcd_R5G6B5_struct to uint32_t Color.
 
-<b>Fonts:</b><br />
-Fonts are implemented using RREs - each letter is represented by rectangles (minimum count possible). This gives us speed, easy font zooming / making font bolder, ...<br />
-Fonts with code page 437 (USA, original IBM PC hardware) and code page 1250 (Central and East European Latin) included. If you need your own fonts / code pages, use fonter.c included as a starting point and assemble your own wlcd_font_*.h
-
-<b>Other features:</b><br />
+<b>Line drawing</b><br />
 Function for drawing a line is heavily optimized for speed (addition of fixed point with precalculations, repeating of preconfigured HSPI transaction, ...).
 The speed-up is the more significant, the more the line is horizontal or vertical. Diagonal lines are
 the slowest (there is no other way than to re-set drawing point for every pixel that's not in the same row/column).
 
+<b>WLCD images</b><br />
+Use wlcd_img_gen tool to generate WLCD images from 24-bit / 16-bit BMPs. WLCD image can be
+RLE compressed (uses 8-bit counter). The wlcd_img_gen tool by default tries both ways
+and decides what's smaller. To produce smaller images, try to avoid smooth color gradients.
+
+WLCD images can be 16 bpp / 24 bpp and <b>this setting must correspond to used WLCD_*BPP</b>
+- if WLCD_BPP==WLCD_16BPP => generate WLCD image with parameter --16bpp
+- if WLCD_BPP==WLCD_18BPP => generate WLCD image with parameter --24bpp
+
+See function wlcd_img_draw(...) for WLCD image format description
+
+<b>Fonts</b><br />
+Fonts are implemented using RREs - each letter is represented by rectangles (minimum count possible). This gives us speed, easy font zooming / making font bolder, ...<br />
+Fonts with code page 437 (USA, original IBM PC hardware) and code page 1250 (Central and East European Latin) included. If you need your own fonts / code pages, use fonter.c included as a starting point and assemble your own wlcd_font_*.h
+
+<b>Other features</b><br />
 Orientation can be changed in 0 / 90 / 180 / 270 degrees of rotation (see "WLCD MAIN CONFIG" section in wlcd.h).
 
 Reading of display data (reading of LCD controller's GRAM) into WLCD image is implemented (optional conversion to R5G6B5 on the fly).
@@ -160,14 +161,14 @@ If you follow the steps correctly, you have everything you need and everything w
 <b>6]</b> at last! double-click rebuild. Everything should be compiled without errors and you should end up with *.bin files in "...\firmware" directory<br />
 ![](https://raw.githubusercontent.com/wdim0/esp8266_fast_lcd_driver_hspi/master/eclipse_import_03.png)
 <br /><br />
-Note: the "official" *.mk of the Devel Kit was modified:<br />
-common_nonos.mk:<br />
+Note: the "official" *.mk of the Devel Kit was modified:
+
+common_nonos.mk:
 - added target wfofgen (to create files "...\wfof\wfof_data.h" and "...\wfof\wfof_idxs.h") which in combination with WFOF system will provide access to data of additional binary files
 - added "include/driver" to EXTRA_INCDIR
 - altered flashinit for 1 MB FLASH size
 
-<br /><br />
-common_rtos.mk:<br />
+common_rtos.mk:
 - added target wfofgen (to create files "...\wfof\wfof_data.h" and "...\wfof\wfof_idxs.h") which in combination with WFOF system will provide access to data of additional binary files
 - added "include/driver" to EXTRA_INCDIR
 - fixed eagle.irom0text.bin offset to 0x20000 (this is what's in original RTOS SDK 1.5.0. ld script "eagle.app.v6.ld")
