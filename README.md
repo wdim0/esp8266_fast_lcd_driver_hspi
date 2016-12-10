@@ -1,7 +1,7 @@
 #ILI9341 / ILI9486 / ILI9488 LCD driver for ESP8266
 
 <b>Fast LCD driver written from scratch for ESP8266 for driving ILI9341 (240x320) or ILI9486 / ILI9488 (320x480) compatible LCD controllers using 4-wire SPI interface.</b> ESP8266's HSPI interface is used (full 16 x 32-bit buffer). There's also option for full SW bit-banging (for any GPIOs, but it's slower than HSPI. Use HSPI whenever possible).<br />
-Maximum effort was taken to create a fast driver, because managing 480x320 pixels over 4-wire SPI is timing critical (just pixel data to fill whole 480x320 screen will take 2.46 Mbit for 16 bpp color depth mode and 3.69 Mbit for 18 bpp color depth mode (24 bits per pixel are used in 18 bpp mode, 2 LSBs from each byte are ignored by LCD controller) and we need to clock out this amount of bits in a fraction of second over the serial line)
+Maximum effort was taken to create a fast driver, because managing 480x320 pixels over 4-wire SPI is timing critical (just pixel data to fill whole 480x320 screen will take 2.46 Mbit for 16 bpp color depth mode (65k colors) and 3.69 Mbit for 18 bpp color depth mode (262k colors, 24 bits per one pixel are used, last two bits from each byte are ignored by LCD controller) and we need to clock out this amount of bits in a fraction of second over the serial line)
 
 Two versions are available:
 - for ESP8266_NONOS_SDK 2.0.0
@@ -50,9 +50,8 @@ You can choose the best suitable HSPI clock using WLCD_SPI_CLK_PREDIV and WLCD_S
 In SW bit-banging mode (WLCD_USE_HSPI is not defined, slower, bigger CPU load), all the GPIOs are managed by SW. This approach is significantly slower. It's implemented just for the critical situations when you've already used the ESP8266's pins GPIO13, GPIO12 (optional), GPIO14 for something else and you have no option to re-wire it to different GPIOs.
 
 <b>Color depth</b><br />
-Supported color depths are 16-bits / 18-bits per pixel (command 0x3A sets DBI[2:0] to 101 or 110).
-Primary color depth is 16 bpp - <b>use WLCD_16BPP for maximum speed</b> (many optimizations take
-advance of the fact, that we can move exactly two pixels by one 32-bit move).<br />
+Supported color depths are 16-bit (65k colors) / 18-bit (262k colors) per pixel (command 0x3A sets DBI[2:0] to 101 or 110).
+Primary color depth is 16 bpp - <b>use WLCD_16BPP for maximum speed</b> (many optimizations take advance of the fact, that we can move exactly two pixels by one 32-bit move).<br />
 Note: ILI9488 doesn't support 16 bpp in SPI mode (DBI Type C mode), it supports
 only 3 bpp (DBI[2:0] = 001) and 18 bpp (DBI[2:0] = 110). Ask ILItek why it was not implemented in ILI9488.
 Compared to that, ILI9341 supports both 16 bpp and 18 bpp in SPI mode and it has only 320x240 pixels. Funny, that ILItek removed the faster way in more demanding controller.<br />
