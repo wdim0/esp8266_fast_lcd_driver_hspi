@@ -7,6 +7,7 @@ Two versions are available:
 - for ESP8266_NONOS_SDK 2.0.0
 - for ESP8266_RTOS_SDK 1.5.0
 
+<br />
 <b>ESP8266 @ 80 MHz with 2.4" LCD module (320x240, 16 bpp, HSPI CLK 40 MHz) - video</b><br />
 [![ESP8266 @ 80 MHz with 2.4" LCD module (320x240, 16 bpp, HSPI CLK 40 MHz)](http://img.youtube.com/vi/E9Ds4IS-Ndk/1.jpg)](http://www.youtube.com/watch?v=E9Ds4IS-Ndk)<br />
 <b>ESP8266 @ 80 MHz with hacked 3.5" KeDei LCD module v4.0 (480x320, 16 bpp, HSPI CLK 20 MHz) - video</b><br />
