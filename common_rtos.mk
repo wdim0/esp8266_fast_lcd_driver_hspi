@@ -6,11 +6,14 @@
 #
 # (c) by CHERTS <sleuthhound@gmail.com>
 #
-# Altered by wdim in 11/2016
+# Altered by wdim in 12/2016
 # - added target wfofgen (to create files "...\wfof\wfof_data.h"
 #   and "...\wfof\wfof_idxs.h") which in combination with WFOF system will provide access
 #   to data of additional binary files
 # - added "include/driver" to EXTRA_INCDIR
+# - fixed eagle.irom0text.bin offset to 0x20000 (this is what's in original RTOS SDK 1.5.0.
+#   ld script "eagle.app.v6.ld")
+# - altered flashinit for 1 MB FLASH size
 #
 #############################################################
 
@@ -254,7 +257,7 @@ ifeq ($(app), 0)
 	$(vecho) "No boot needed."
 	$(vecho) "Generate eagle.flash.bin and eagle.irom0text.bin successully in folder $(FW_BASE)"
 	$(vecho) "eagle.flash.bin-------->0x00000"
-	$(vecho) "eagle.irom0text.bin---->0x10000"
+	$(vecho) "eagle.irom0text.bin---->0x20000"
 else
     ifneq ($(boot), new)
 	$(Q) $(SDK_TOOLS)/gen_appbin.exe $@ 1 $(mode) $(freqdiv) $(size_map) $(app)
@@ -317,10 +320,10 @@ endif
 
 flash: all
 ifeq ($(app), 0) 
-	$(ESPTOOL) -p $(ESPPORT) -b $(ESPBAUD) write_flash $(flashimageoptions) 0x00000 $(FW_BASE)/eagle.flash.bin 0x10000 $(FW_BASE)/eagle.irom0text.bin
+	$(ESPTOOL) -p $(ESPPORT) -b $(ESPBAUD) write_flash $(flashimageoptions) 0x00000 $(FW_BASE)/eagle.flash.bin 0x20000 $(FW_BASE)/eagle.irom0text.bin
 else
 ifeq ($(boot), none)
-	$(ESPTOOL) -p $(ESPPORT) -b $(ESPBAUD) write_flash $(flashimageoptions) 0x00000 $(FW_BASE)/eagle.flash.bin 0x10000 $(FW_BASE)/eagle.irom0text.bin
+	$(ESPTOOL) -p $(ESPPORT) -b $(ESPBAUD) write_flash $(flashimageoptions) 0x00000 $(FW_BASE)/eagle.flash.bin 0x20000 $(FW_BASE)/eagle.irom0text.bin
 else
 	$(ESPTOOL) -p $(ESPPORT) -b $(ESPBAUD) write_flash $(flashimageoptions) $(addr) $(FW_BASE)/upgrade/$(BIN_NAME).bin
 endif
@@ -347,7 +350,7 @@ endif
 # FLASH SIZE
 flashinit:
 	$(vecho) "Flash init data default and blank data."
-	$(ESPTOOL) -p $(ESPPORT) write_flash $(flashimageoptions) 0x7c000 $(SDK_BASE)/bin/esp_init_data_default.bin 0x7e000 $(SDK_BASE)/bin/blank.bin
+	$(ESPTOOL) -p $(ESPPORT) write_flash $(flashimageoptions) 0xFC000 $(SDK_BASE)/bin/esp_init_data_default.bin 0xFE000 $(SDK_BASE)/bin/blank.bin
 
 rebuild: clean wfofgen all
 

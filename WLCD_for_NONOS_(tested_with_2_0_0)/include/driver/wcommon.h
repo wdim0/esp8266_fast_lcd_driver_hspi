@@ -1,5 +1,5 @@
 /*
- * Created by Martin Winkelhofer 11/2016
+ * Created by Martin Winkelhofer 11,12/2016
  * W-Dimension / wdim / wdim0 / winkelhofer.m@gmail.com / https://github.com/wdim0
  *   _____
  *  / ___/__  __ _  __ _  ___  ___
@@ -7,7 +7,7 @@
  * \___/\___/_/_/_/_/_/_/\___/_//_/
  *
  * Common macros and functions for ESP8266.
- * v1.0 (11/2016)
+ * v1.1 (12/2016)
  *
  * This file is part of WCOMMON - W-Dimension's common macros and functions for ESP8266.
  *
@@ -29,10 +29,10 @@
 
 #include <c_types.h>
 
-#define WCOMMON_VERSION			"v1.0" //11/2016
+#define WCOMMON_VERSION			"v1.1" //12/2016
 
 #define UPPER_CHAR(Ch)		( (((Ch)>='a')&&((Ch)<='z'))?(Ch)-('a'-'A'):(Ch) )
-#define RAND_0_TO_X(x)		( (uint32_t)rand() / ((~(uint32_t)0)/(x)) ) //get uint32_t random number 0..x (including)
+#define RAND_0_TO_X(x)		( (uint32_t)os_random() / ((~(uint32_t)0)/(x)) ) //get uint32_t random number 0..x (including)
 #define NOT_FLAG8(x)		( (uint8_t)~(uint8_t)(x) )
 #define NOT_FLAG16(x)		( (uint16_t)~(uint16_t)(x) )
 

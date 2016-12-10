@@ -6,11 +6,12 @@
 #
 # (c) by CHERTS <sleuthhound@gmail.com>
 #
-# Altered by wdim in 11/2016
+# Altered by wdim in 12/2016
 # - added target wfofgen (to create files "...\wfof\wfof_data.h"
 #   and "...\wfof\wfof_idxs.h") which in combination with WFOF system will provide access
 #   to data of additional binary files
 # - added "include/driver" to EXTRA_INCDIR
+# - altered flashinit for 1 MB FLASH size
 #
 #############################################################
 
@@ -347,7 +348,7 @@ endif
 # FLASH SIZE
 flashinit:
 	$(vecho) "Flash init data default and blank data."
-	$(ESPTOOL) -p $(ESPPORT) write_flash $(flashimageoptions) 0x7c000 $(SDK_BASE)/bin/esp_init_data_default.bin 0x7e000 $(SDK_BASE)/bin/blank.bin
+	$(ESPTOOL) -p $(ESPPORT) write_flash $(flashimageoptions) 0xFC000 $(SDK_BASE)/bin/esp_init_data_default.bin 0xFE000 $(SDK_BASE)/bin/blank.bin
 
 rebuild: clean all
 

@@ -9,4 +9,6 @@
 #define DBG
 #endif
 
+#define RAND_0_TO_X(x)			( (uint32_t)os_random() / ((~(uint32_t)0)/(x)) ) //get uint32_t random number 0..x (including)
+
 #endif

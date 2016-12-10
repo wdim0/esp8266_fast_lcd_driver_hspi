@@ -1,13 +1,14 @@
 /*
- * Created by Martin Winkelhofer 03,11/2016
+ * Created by Martin Winkelhofer 03,11,12/2016
  * W-Dimension / wdim / wdim0 / winkelhofer.m@gmail.com / https://github.com/wdim0
  *    __   ________          ______   _______  ___________    __  ______   _______  ____ ___  ___ 
  *   / /  / ___/ _ \  ____  /  _/ /  /  _/ _ \|_  / / <  /  _/_/ /  _/ /  /  _/ _ \/ / /( _ )( _ )
  *  / /__/ /__/ // / /___/ _/ // /___/ / \_, //_ <_  _/ / _/_/  _/ // /___/ / \_, /_  _/ _  / _  |
  * /____/\___/____/       /___/____/___//___/____//_//_/ /_/   /___/____/___//___/ /_/ \___/\___/ 
  *
- * Driver for LCD controllers ILI9341 / ILI9488 (or compatible).
- * v1.01 (11/2016)
+ * Driver for LCD controllers ILI9341 / ILI9488 (or compatible) using 4-wire SPI interface
+ * hooked to ESP8266's HSPI interface (or using SW bit-banging for any GPIOs).
+ * v1.50 (12/2016), NON-OS version
  *
  * This file is part of WLCD - W-Dimension's LCD driver for ESP8266.
  *
@@ -37,7 +38,7 @@
 #define DBG_WLCD
 #endif
 
-typedef struct {
+typedef struct __packed {
 	const uint8_t CharWidth;
 	const uint8_t CharHeight;
 	const uint8_t FirstCharCode;
@@ -132,7 +133,7 @@ typedef struct {
 	#define WLCD_BACKLIGHT_CTRL_8			0xBF
 	#define WLCD_VCOM_CTRL_2				0xC7
 	#define WLCD_INTERFACE_CTRL				0xF6
-#elif(WLCD_DISPLAY==WLCD_ILI9488)
+#elif((WLCD_DISPLAY==WLCD_ILI9488)||(WLCD_DISPLAY==WLCD_ILI9488_KDv4_HACK))
 	//commands specific to ILI9488 (based on mentioned pdf documents)
 	#define WLCD_READ_NUM_OF_DSI_ERRORS		0x05
 	#define WLCD_ALL_PIXEL_OFF				0x22

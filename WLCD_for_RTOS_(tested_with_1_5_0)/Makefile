@@ -8,12 +8,13 @@ SDK_BASE	= c:/Espressif/ESP8266_RTOS_SDK
 #SPI_SPEED	= 40
 #SPI_MODE	= QIO
 #SPI_SIZE_MAP	= 2
-#ESPPORT		= COM2
-#ESPBAUD		= 256000
+ESPPORT		= COM3
+ESPBAUD		= 256000
 
 # Basic project settings
 MODULES	= wfof driver user
-LIBS	= gcc hal phy pp net80211 wpa crypto main freertos lwip minic smartconfig
+#LIBS	= gcc hal phy pp net80211 wpa crypto main freertos lwip minic smartconfig
+LIBS	= gcc hal phy pp net80211 wpa crypto main freertos lwip minic
 
 # Root includes
 include	../common_rtos.mk

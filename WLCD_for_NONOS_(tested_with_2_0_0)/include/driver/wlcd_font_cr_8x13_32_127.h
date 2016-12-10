@@ -1,13 +1,14 @@
 /*
- * Created by Martin Winkelhofer 03,11/2016
+ * Created by Martin Winkelhofer 03,11,12/2016
  * W-Dimension / wdim / wdim0 / winkelhofer.m@gmail.com / https://github.com/wdim0
  *    __   ________          ______   _______  ___________    __  ______   _______  ____ ___  ___ 
  *   / /  / ___/ _ \  ____  /  _/ /  /  _/ _ \|_  / / <  /  _/_/ /  _/ /  /  _/ _ \/ / /( _ )( _ )
  *  / /__/ /__/ // / /___/ _/ // /___/ / \_, //_ <_  _/ / _/_/  _/ // /___/ / \_, /_  _/ _  / _  |
  * /____/\___/____/       /___/____/___//___/____//_//_/ /_/   /___/____/___//___/ /_/ \___/\___/ 
  *
- * Driver for LCD controllers ILI9341 / ILI9488 (or compatible).
- * v1.01 (11/2016)
+ * Driver for LCD controllers ILI9341 / ILI9488 (or compatible) using 4-wire SPI interface
+ * hooked to ESP8266's HSPI interface (or using SW bit-banging for any GPIOs).
+ * v1.50 (12/2016), NON-OS version
  *
  * This file is part of WLCD - W-Dimension's LCD driver for ESP8266.
  *
