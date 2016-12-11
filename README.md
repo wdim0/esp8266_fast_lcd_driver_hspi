@@ -43,9 +43,14 @@ If WLCD_USE_HSPI is not defined (SW bit-banging, slower, bigger CPU load):
 ##Main features
 
 <b>Hardware HSPI / SW bit-banging</b><br />
-In HSPI mode (WLCD_USE_HSPI is defined, fast, less CPU load) we're using ESP8266's HSPI hardware module. The whole 16 x 32-bit buffer (SPI_W0..15) is used for MISO/MOSI transactions and we're using 32-bit copy instructions to speed up the copy process.<br />
-There's tradeoff because of that - if we're drawing image which is not RLE compressed (is just a continuous stream of R5G6B5 pixels) and we're using HSPI mode, then image data buffer must be 4-bytes aligned and allocated memory length must be multiples of 4.<br />
-You can choose the best suitable HSPI clock using WLCD_SPI_CLK_PREDIV and WLCD_SPI_CLK_CNTDIV (see "WLCD MAIN CONFIG" section in wlcd.h). Most of the displays are happy up to 40 MHz SPI clock (including), see YT videos on the top.
+In HSPI mode (WLCD_USE_HSPI is defined, fast, less CPU load) we're using ESP8266's HSPI hardware module.<br />
+You can choose the best suitable HSPI clock using WLCD_SPI_CLK_PREDIV and WLCD_SPI_CLK_CNTDIV (see "WLCD MAIN CONFIG" section in wlcd.h). Most of the displays are happy up to 40 MHz SPI clock (including), see YT videos on the top.<br />
+The whole 16 x 32-bit buffer (SPI_W0..15) is used for MISO/MOSI transactions and we're using 32-bit copy instructions to speed up the copy process. There's tradeoff because of that - if we're drawing image which is not RLE compressed (is just a continuous stream of pixels) and we're using HSPI mode, then image data buffer must be 4-bytes aligned (and allocated memory size must be multiples of 4), because we're using 32-bit copy. Copying of unaligned address would end up in "Fatal exception (9)" - "Attempt to load or store data at an address which cannot be handled due to alignment" according to XTENSA LX 106 datasheet. So we need to use STORE_ATTR ("&#95;&#95;attribute&#95;&#95; ((aligned(4)))") prefix when declaring arrays passed as Buf. We can also use os_malloc(...) - at least on ESP8266 the os_malloc(...) also allocates 4-byte aligned arrays.
+
+	//all of these will produce pointer to MyBuf that's 4-bytes aligned.
+	uint8_t STORE_ATTR MyBuf[10*4];
+	uint32_t STORE_ATTR MyBuf[10];
+	uint8_t* MyBuf = (uint8_t*)os_malloc(10*4);
 
 In SW bit-banging mode (WLCD_USE_HSPI is not defined, slower, bigger CPU load), all the GPIOs are managed by SW. This approach is significantly slower. It's implemented just for the critical situations when you've already used the ESP8266's pins GPIO13, GPIO12 (optional), GPIO14 for something else and you have no option to re-wire it to different GPIOs.
 
