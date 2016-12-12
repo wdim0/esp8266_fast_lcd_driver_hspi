@@ -11,7 +11,7 @@ Two versions are available:
 <b>ESP8266 @ 80 MHz with 2.4" LCD module (320x240, 16 bpp, HSPI CLK 40 MHz) - video</b><br />
 [![ESP8266 @ 80 MHz with 2.4" LCD module (320x240, 16 bpp, HSPI CLK 40 MHz)](http://img.youtube.com/vi/E9Ds4IS-Ndk/1.jpg)](http://www.youtube.com/watch?v=E9Ds4IS-Ndk)<br />
 <b>ESP8266 @ 80 MHz with hacked 3.5" KeDei LCD module v4.0 (480x320, 16 bpp, HSPI CLK 40 MHz) - video</b><br />
-[![ESP8266 @ 80 MHz with hacked 3.5" KeDei LCD module v4.0 (480x320, 16 bpp, HSPI CLK 40 MHz)](http://img.youtube.com/vi/7dyVdiZUw1o/1.jpg)](http://www.youtube.com/watch?v=7dyVdiZUw1o)
+[![ESP8266 @ 80 MHz with hacked 3.5" KeDei LCD module v4.0 (480x320, 16 bpp, HSPI CLK 40 MHz)](http://img.youtube.com/vi/7dyVdiZUw1o/1.jpg)](http://www.youtube.com/watch?v=7dyVdiZUw1o)<br />
 <b>ESP8266 @ 80 MHz with ER-TFT035-6 - 3.5" LCD module from www.buydisplay.com (480x320, 18 bpp, HSPI CLK 40 MHz) - video</b><br />
 [![ESP8266 @ 80 MHz with ER-TFT035-6 - 3.5" LCD module from www.buydisplay.com (480x320, 18 bpp, HSPI CLK 40 MHz)](http://img.youtube.com/vi/X0mwfAqiqkc/2.jpg)](http://www.youtube.com/watch?v=X0mwfAqiqkc)
 
